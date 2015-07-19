@@ -18,16 +18,19 @@ module.exports = function (app,express,passport) {
     }));
     /*app.use(require('multer'));----->This causes problem do not use this is required for file uplods check when required*/
 
-    //Passport specific initialization
-    var Local = new StrateryObj('local', 
-            require('./Auth/Strategies/Local.js'),
+    //Out Auth strtegies for local Auth
+    var LocalStrategy = require('./Auth/Strategies/Local.js');
+    var local = new StrateryObj(LocalStrategy.name, LocalStrategy.authFunc,
             require('passport-local').Strategy);
-    var mongousers = new StrateryObj('mogousers',
-            require('./Auth/Strategies/Mogolocal.js'),
+
+    var MongoStrategy = require('./Auth/Strategies/Mongolocal.js');
+    var mongousers = new StrateryObj(MongoStrategy.name, MongoStrategy.authFunc,
             require('passport-local').Strategy);
     var mongoose = require('mongoose');
     mongoose.connect(require('mongodb-uri').formatMongoose('mongodb://test:test123@ds047632.mongolab.com:47632/passport_local_mongo'));
-    require('./Auth/Setstrategy.js')(passport, app, [Local,mongousers]);
+
+    //Register all the Auth Strategies with passport
+    require('./Auth/Setstrategy.js')(passport, app, [local,mongousers]);
 
     //Setting the templating engine
     //and view direcotry
