@@ -1,4 +1,9 @@
 module.exports = function (app,express,passport) {
+
+    //These are the common paths where we keep the
+    //Project specific libraries sometime required
+    require.paths = ['.', './Models', './Auth'];
+        
     //Read express 4.0 migration doc
     //http://expressjs.com/guide/migrating-4.html
     //And passport doc 

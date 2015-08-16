@@ -4,7 +4,10 @@ var schema = mongoose.Schema;
 
 var Account = new schema ({
     username:String,
-    password:String
+    email:String,
+    phone:String,
+    countryCode:String,
+    uid:String
 });
 
 Account.plugin(passportLocalMongoose);
