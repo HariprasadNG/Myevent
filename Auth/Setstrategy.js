@@ -3,7 +3,10 @@ module.exports = function (passport, app, strategies) {
     app.use(passport.session());
 
     strategies.forEach(function(item){
-        passport.use(item.strategyname,new item.strategy(item.authenticate));
+        var x;
+        for (x in item.strategy)
+            console.log(x+ ":" + item.strategy[x]);
+        passport.use(item.strategyname,item.strategy);
     });
 
     //Note all the Auth strategies use same serializers and deserializers

@@ -16,11 +16,11 @@ module.exports = function (express){
     });
     
     router.get("/", function(req,res){
-        res.send("Hello logged on User " + req.user.username);
+        res.send("Hello logged on User " + JSON.stringify(req.user));
     });
 
     router.get("/session", function(req,res){
-        res.send("Hello logged on User " + req.user + " in session ");
+        res.send("Hello logged on User " + JSON.stringify(req.user) + " in session ");
     });
 
 

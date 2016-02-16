@@ -3,7 +3,10 @@ module.exports = {
         console.log("verifying " + user + " " + pass);
         if(user == 'hariprasad'){
             if(pass == 'password'){
-                return done(null, user);
+                return done(null, {'username':user,
+                                   'email':'aa@aa.com',
+                                   'phone':123456789,
+                                   'uid':45444});
             }else{
                 return done(null, false, {
                     'message':'Incorrect password'
