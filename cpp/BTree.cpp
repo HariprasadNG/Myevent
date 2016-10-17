@@ -145,6 +145,17 @@ Btree* Btree::insert(int v) {
     return this;
 }
 
+Btree* Btree::search(int v) {
+    if(m_keys == 0) 
+    return NULL;
+    Btree *c = this;
+    Btree *p = NULL;
+    int i = findFirstLessOrEq(v, values, m_keys);
+    if( (i > -1) && (values[i] == v)) return this;
+    if(childs[i+1]) return childs[i+1]->search(v);
+    return NULL;
+}
+
 int main() {
     Btree* t = new Btree();
     for (int i = 0; i<100; i++) {
