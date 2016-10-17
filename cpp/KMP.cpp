@@ -1,12 +1,32 @@
 #include<iostream>
 #include<vector>
 #include<string>
-
+#define MAX(A,B) A>B?A:B;
 using namespace std;
 
-//S[0..Z[1]] == S[1..Z[1]+1]
-//S[0..Z[2]] == S[2..Z[2]+2]
-//S[0..Z[x]] == S[x..Z[x]+x]
+//If s = abcaeabcabd then this version
+//print worng answer fo SP[9]
+//SP[9] = 0 As per this program
+//But it is actually 2 (ab)
+//Note:If we impliment KMP with the below
+//Preprocessing then that will not faile
+//But the prformance will be low.
+auto ComputeSp(string S) {
+    vector<int> r;
+    r.push_back(0);
+
+    for (int i =1; i < S.length(); i++) {
+        if (S[r[i-1]] == S[i]) {
+            r.push_back(r[i-1] + 1);
+        } else {
+            r.push_back(0);
+        }
+    }
+
+    return r;
+}
+
+//Z_Algo copied from Z-Algo
 vector<int> Z_Algo(string S) {
     auto len = S.length();
     vector<int> Z;
@@ -79,29 +99,59 @@ vector<int> Z_Algo(string S) {
     return Z;
 }
 
-vector<int> find_pattern(string T, string P) {
-    string C = P;
-    C.append("$");
-    C.append(T);
-    auto Z = Z_Algo(C);
-    vector<int> R;
-    int i =0;
-    for (auto x = Z.begin(); x != Z.end(); x++,i++) {
-        if (*x == P.length()) {
-            R.push_back(i - P.length() - 1);
+auto Z_AlgoBasedPreProc(string S) {
+    auto zR = Z_Algo(S);
+    vector<int> tr;
+    for (int i = 0; i < S.length(); i++) {
+        tr.push_back(0);
+    }
+    for (int i = 1; i < S.length(); i++) {
+        if (zR[i] != 0) {
+            tr[ i + zR[i] - 1] = zR[i];
         }
     }
-    return R;
+    for (int i = S.length() - 1; i >= 1; i--) {
+        tr[i] = MAX(tr[i], tr[i+1]-1);
+    }
+
+    return tr;
 }
 
+auto KMP (string T, string P) {
+    vector<int> r;
+    int ti = 0;
+    int pi = 0;
+    auto Z = Z_AlgoBasedPreProc(P);
+    while ( (T.length() - ti) >= P.length() ) {
+        if (T[ti + pi] != P[pi]) {
+            if (pi == 0) {
+                ti++;
+            } else {
+                ti += pi - Z[pi-1];
+                pi = Z[pi-1];
+            }
+        } else {
+            pi++;
+            if (pi == P.length()) {
+                r.push_back(ti);
+                ti++; //This can be optimized think of
+                pi = 0;
+            }
+        }
+    }
+    return r;
+}
 
 int main () {
-    string t;
-    cin >> t;
-    string p;
-    cin >> p;
-    auto Z = Z_Algo(p);  //find_pattern(t, p);
-    for (auto x = Z.begin(); x != Z.end(); x++) {
+    string T;
+    cin >> T;
+    string P;
+    cin >> P;
+    //auto r = Z_AlgoBasedPreProc(S);//ComputeSp(S);
+    auto r = KMP(T, P);
+    for (auto x = r.begin();
+              x != r.end();
+              x++){
         cout << *x << ",";
     }
     cout << endl;
