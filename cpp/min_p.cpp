@@ -34,7 +34,7 @@ int ComputeMinDis(int r, int c) {
     if (mat[r-1][c-1].second <= 0) {
         return (mat[r-1][c-1].first * -1) + 1;
     } else {
-        return max(mat[r-1][c-1].first * -1, 1);
+        return max((mat[r-1][c-1].first * -1) + 1, 1);
     }
 }
 

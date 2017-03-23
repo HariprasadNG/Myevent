@@ -49,7 +49,7 @@ void printSoln (int n) {
             if(mat[i][j])cout << j + 1 << " ";
         }
     }
-    cout << "]";
+    cout << "]" << endl;
 }
 
 int findQueenInRow (int n, int r) {
