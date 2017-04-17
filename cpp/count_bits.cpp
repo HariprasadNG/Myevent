@@ -23,7 +23,6 @@ int solve (vector<int> &v) {
     return count << 1;
 }
 
-
 int main () {
     int T;
     cin >> T;
