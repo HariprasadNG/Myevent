@@ -3,7 +3,27 @@
 #include <string>
 #include <set>
 using namespace std;
+//Longest substring.
+int lcsR(string a, string b, int ai = 0, int bi = 0) {
+    if (a[ai] == '\0') {
+        return 0;
+    }
+    if (b[bi] == '\0') {
+        return 0;
+    }
+    if (a[ai] == b[bi]) {
+        int count = 0;
+        while(a[ai++] == b[bi++]) {
+            count++;
+        }
+        return count;
+    }
+    int r1 = lcsR(a, b, ai + 1, bi);
+    int r2 = lcsR(a, b, ai, bi + 1);
+    return (r1 > r2)?r1:r2;
+}
 
+//Longest common subsequence.
 int lcs(string a, string b) {
     vector<vector<set<string>>> max;
     for(int i = 0 ; i < a.length(); i++) {
@@ -71,7 +91,8 @@ int main () {
         string a, b;
         cin >> a;
         cin >> b;
-        lcs(a,b);
+        cout << lcsR(a,b);
+        //lcs(a, b);
         cout << endl;
     }
 }

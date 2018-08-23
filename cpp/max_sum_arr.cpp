@@ -12,7 +12,7 @@ int maxSum(vector<int> a) {
             max = rs + a[i];
         } 
         if ((rs + a[i]) < 0) {
-            rs = 0;
+            rs = 0; //This case is for all -ve numbers find the biggest negative numnber.
         } else {
             rs += a[i];
         }

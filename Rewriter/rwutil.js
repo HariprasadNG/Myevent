@@ -2,8 +2,8 @@ var urlparse = require('url');
 var rwutil = {
     m_cloc:'https://127.0.0.1:8080',
     joinPath:function (f, s) {
-        if (s == undefined || s=='') return f;
-        if (f == undefined || f =='') return s;
+        if (s == undefined || s=='') return f + '/';
+        if (f == undefined || f =='') return '/' + s;
         if (f[f.length-1] == '/') {
             if (s[0] == '/') {
                 return f + s.substr(1, s.length);
@@ -80,7 +80,13 @@ var rwutil = {
         pathname.pop();
         pathname = pathname.join('/');
         var x = rwutil.joinPath(pathname, urlInfo) + ((Url.search != undefined)?Url.search:'') + ((Url.hash != undefined)?Url.hash:'');
-        if (x[0] != '/') x = '/' + x;
+        if (x[0] != '/') {
+            var cUrl = new URL(m_loc);
+            var y = cUrl.pathname.split('/');
+            y.pop();
+            y  = y.join('/');
+            x = y + '/' + x;
+        }
         return x;
     }
 };

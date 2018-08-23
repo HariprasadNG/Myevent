@@ -9,13 +9,13 @@ var bkend = require('./bkEndClinet.js');
 var cstcode = require('./cstcodegen.js');
 var space = '';
 var https = require('https');
+code = cstcode.OverrideCodeGen(code);
+
 var options = {
     key: fs.readFileSync('./dev.hari.com.pem'),
     cert:fs.readFileSync('./dev.hari.com.crt')
 };
 var srv = https.createServer(options, requestHandler);
-
-code = cstcode.OverrideCodeGen(code);
 srv.listen(443);
 
 function requestHandler(req, res) {

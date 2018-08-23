@@ -73,9 +73,13 @@
         } else if (obj.constructor == XMLHttpRequest && func == 'open') {
               args[1] = rwutil.rewriteUrl(args[1]);
         } else if (obj.constructor == window.ServiceWorkerContainer && func == 'register') {
+            //args[0] = rwutil.rewriteUrl(args[0]);
+            //args[0] +=  ",rewrite,false";
             args[0] = rwutil.rewriteUrl(args[0]);
-            args[0] +=  ",rewrite,false";
-            //args[0] = args[0].replace(/secure,true/i, "secure,true,sw,true");
+            args[0] = args[0].replace(/secure,true/i, "secure,true,sw,true");
+            for (var i = 2; i < arguments.length; i++) {
+                args.push(arguments[i]);
+            }
         } else if (func == 'postMessage') {
             if (args.length > 1  && args[1] != '*')
             args[1] = rwutil.rewriteUrl(args[1]);
@@ -91,8 +95,12 @@
                }
            }
            args[2] = rwutil.rewriteUrl(args[2]);
-           return;
            return history[func](args[0], args[1], args[2]);
+        } else if (obj == window.caches && func == 'match') {
+            if (args[0] && args[0].url) {
+                console.log(args[0].url);
+                //args[0].url = unrewriteUrl(args[0].url);
+            }
         }
         if (funApply != null) 
             return funcApply.apply(obj, args);

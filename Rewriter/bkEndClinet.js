@@ -4,7 +4,6 @@ var urlparse = require('url');
 var ctrw = require('./ctrw.js');
 var fs = require('fs');
 
-
 function backEndReqOpt(infoSt, rwutil) {
     var info = infoSt.split(',');
     this.port = 80;
@@ -139,15 +138,31 @@ function bkClient(req, res, esprima, code, rwutil) {
                 console.log("HEADERS: " + JSON.stringify(this.uInfo.headers));
                 console.error("404 FOR LINK " + this.uInfo.generateUrl());
             }
+            if (this.uInfo.sw) {
+                var hkfs = '';
+                hkfs += "var window = {location:{href:'https://lcl.hari.com/sw-test/secure,true,hostname,mdn.github.io,port,443,file,'}};var location = window.location; var XMLHttpRequest = undefined; var history = {constructor:null};";
+                hkfs += "var module = {};importScripts('/clientbootstrap.js?servelocal=true,rewrite=false');";
+                hkfs += "importScripts('/rwutil.js?servelocal=true,rewrite=false');";
+                hkfs += "importScripts('/cstcodegen.js?servelocal=true,rewrite=false');";
+                hkfs += "importScripts('/ctrw.js?servelocal=true,rewrite=false');";
+                hkfs += "importScripts('/esprima.js?servelocal=true,rewrite=false');";
+                hkfs += "importScripts('/escodegen.browser.js?servelocal=true,rewrite=false');";
+                hkfs += "window.esprima = esprima;";
+                hkfs += "window.escodegen = escodegen;";
+                hkfs += "importScripts('/clientimpl.js?servelocal=true,rewrite=false');";
+                hkfs += "module = undefined;";
+                hkfs += "importScripts('/clientimpl.js?servelocal=true,rewrite=false');debugger;\n";
+                buf = hkfs + buf;
+            }
+           
+            //Write Headers at first
             console.log(exRes.headers['content-security-policy']);
             if (exRes.headers['content-security-policy'] != null)
                 delete exRes.headers['content-security-policy'];
             exRes.headers['content-length'] = Buffer.byteLength(buf);
             this.orgRes.writeHead(exRes.statusCode, exRes.headers);
-            if (this.uInfo.sw) {
-                var hkfs = fs.readFileSync('./clientimpl.js');
-                buf = hkfs + buf;
-            }
+            
+            //Write body
             this.orgRes.write(buf);
             this.orgRes.end();
         }.bind(this));

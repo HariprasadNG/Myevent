@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <utility>
+#error hi
 using namespace std;
 
 int median (vector<vector<int>> &mat) {

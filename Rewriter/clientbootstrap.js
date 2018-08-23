@@ -7,7 +7,13 @@ function require(module) {
                     try {
                         x = new URL(u);
                     } catch (e) {
-                        if (u[0] != '/') u = '/' + u;    
+                        if (u[0] != '/')  {
+                            var cUrl = new URL(rwutil.m_cloc);
+                            var y = cUrl.pathname.split('/');
+                            y.pop();
+                            y  = y.join('/');
+                            u = y + '/' + u;
+                        }
                         var t  = new URL(rwutil.m_cloc);
                         x = new URL(t.protocol + "//" + t.host + u);
                     }

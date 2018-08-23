@@ -162,7 +162,7 @@ var cstcodegen = {
             }
 
             if (!(flags & code.F_ALLOW_CALL)) {
-                HookFunctions.call(this);
+                UnHookFunctions.call(this);
                 return ['(', result, ')'];
             }
             var ret =  code.parenthesize(result, code.Precedence.Call, precedence);

@@ -24,7 +24,6 @@ jsRewriter.prototype.rewrite = function () {
         this.buf = this.buf.replace(/[\'\"]use\s+strict[\'\"];/, bootstrp);
     } catch (e) {
         console.error("Error while JavaScript rewriting " + e);
-        //console.log(this.buf);
         throw e;
     }
     return this.buf;
