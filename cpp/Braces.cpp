@@ -1,6 +1,7 @@
 #include<iostream>
 #include<set>
 #include<string>
+#include<vector>
 
 
 using namespace std;
@@ -32,6 +33,54 @@ void Braces (int n) {
     GenerateBraces(buffer, buffer + n*2 - 1);
 }
 
+void BracesWorking (int n, string prefix = "", string suffix = "") {
+    if (n == 0) {
+        cout << prefix << suffix << endl;
+        return;
+    }
+    if (n == 1) {
+        cout << prefix << "{}" << suffix << endl;
+        return;
+    }
+    if (n == 2) {
+        cout << prefix << "{{}}" << suffix << endl;
+        cout << prefix << "{}{}" << suffix << endl;
+        return;
+    }
+    BracesWorking(n-1, prefix + "{", suffix + "}");
+    BracesWorking(n-1, prefix + "{}", suffix);
+    BracesWorking(n-2, prefix + "{", suffix + "}{}");
+}
+
+
+int cat (int n) {
+    if ( n == 0) return 1;
+    if ( n == 1) return 1;
+    int count = 0;
+    for (int i = 0; i <= n - 1; i++) {
+        count += cat(i)*cat(n-1-i);
+    }
+    return count;
+}
+
+void catbc (int ob, int cb, string r) {
+    if ( cb == 0 && ob == 0) {
+        cout << r << endl;
+    }
+
+    if (ob > 0) {
+        catbc(ob - 1, cb, r + "{");
+    }
+    if (cb > ob) {
+        catbc(ob, cb - 1, r + "}");
+    }
+}
+
+
 int main () {
-    Braces(4);    
+    int c = 10;
+    cin >> c;
+    //cout << cat(c) << endl;;
+    catbc(c, c, "");
+    //Braces(c);    
 }
