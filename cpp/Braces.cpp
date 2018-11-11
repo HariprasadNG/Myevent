@@ -33,6 +33,7 @@ void Braces (int n) {
     GenerateBraces(buffer, buffer + n*2 - 1);
 }
 
+//This misses few set of braces
 void BracesWorking (int n, string prefix = "", string suffix = "") {
     if (n == 0) {
         cout << prefix << suffix << endl;
@@ -63,6 +64,8 @@ int cat (int n) {
     return count;
 }
 
+//This will generate all possible braces.
+//And this is the right solution.
 void catbc (int ob, int cb, string r) {
     if ( cb == 0 && ob == 0) {
         cout << r << endl;

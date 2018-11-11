@@ -68,55 +68,45 @@ class Dictonary {
         }
 };
 
-class CharMap {
-    public:
-        char c;
-        int count;
-        CharMap():c(0), count(0) {
-            
-        }
-};
 
-vector<CharMap> stringToCharMap(string ip) {
-    vector<CharMap> cmp(255);
+vector<int> stringToCharMap(string ip) {
+    vector<int> cmp(26, 0);
     for (auto c:ip) {
-        cmp[c].c = c;
-        cmp[c].count++;
+        cmp[c - 'a']++;
     }
     return cmp;
 };
 
-bool Done (vector<CharMap> &ip) {
-
-
+bool Done (vector<int> &ip) {
     for (auto x: ip) {
-        if (x.count) return false;
+        if (x) return false;
     }
     return true;
 }
 
-bool construct (vector<CharMap> &ip, Dictonary &d, Trie* cl, vector<string> &res) {
+bool construct (vector<int> &ip, Dictonary &d, Trie* cl, vector<string> &res) {
     if (Done(ip)) return true;
-    for (char c = 'a'; c <= 'z'; c++) {
-        if (ip[c].count <= 0) {
+    for (char C = 'a'; C <= 'z'; C++) {
+        char c = C - 'a';
+        if (ip[c] <= 0) {
             continue;
         }
-        auto it = cl->next.find(c);
+        auto it = cl->next.find(c + 'a');
         if (it != cl->next.end()) {
-            ip[c].count--;
+            ip[c]--;
             if (it->second->Valid) {
                 res.push_back(it->second->word);
                 if (construct(ip, d, d.getTrie(), res)) {
                     return true;
                 } else {
-                    ip[c].count++;
+                    ip[c]++;
                     res.pop_back();
                 }
             } else {
                 if( construct(ip, d, it->second, res) ) {
                     return true;
                 } else {
-                    ip[c].count++;
+                    ip[c]++;
                 }
             }
         }
@@ -139,7 +129,7 @@ int main () {
     x.addWord("zero");
     string ip = "onetwothreefourfivesixseveneightninezero";
     cin >> ip;
-    vector<CharMap> cm = stringToCharMap(ip);
+    vector<int> cm = stringToCharMap(ip);
     vector<string> result;
     construct(cm, x, x.getTrie(), result);
     for (auto r: result) {
